@@ -35,6 +35,6 @@ export const reboot = css`
     ${font.sizes.base()};
     color: ${color.black1};
     text-align: left; /* 3 */
-    background-color: ${color.black1}; /* 2 */
+    background-color: ${color.white}; /* 2 */
   }
 `

@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Text } from 'ui/components/Text'
 import { Input } from 'ui/components/Input'
-import { Button } from 'ui/components/Button'
 import styled from 'styled-components'
-import { sizes } from '../../theme'
+import { sizes } from 'ui/theme'
+import { Button } from 'ui/components/Button'
 
 const comics = [
   {
@@ -45,25 +45,37 @@ export const ComicsList = () => {
       <Text as="p" size="medium" marginBottom="base">
         Escribe un personaje en la lista
       </Text>
-      <ComicInput onChange={(event) => setInputText(event.target.value) } value={inputText} />
-      <Button marginLeft="base" onClick={() => setInputText('')}>
-        Limpiar búsqueda
-      </Button>
-      {filteredComics.map(comic => (
-        <Comic key={comic.id}>
-          <Text as="p" weight="bold">
-            {comic.title}
-          </Text>
-          <Text as="p">{comic.characters.join(', ')}</Text>
-        </Comic>
-      ))}
-      <Text as="p">
-        Elementos en la lista: {filteredComics.length}
-      </Text>
+      <Header onFilter={setFilter} onClear={() => setFilter('')} filter={filter} />
+      <List comics={filteredComics} />
+      <Footer comicCount={filteredComics.length} />
     </Layout>
   )
 }
 
+const Header = ({ onFilter, onClear, filter }) => (
+  <>
+    <ComicInput onChange={event => onFilter(event.target.value)} value={filter} />
+    <Button marginLeft="base" onClick={onClear}>
+      Limpiar búsqueda
+    </Button>
+  </>
+)
+
+const List = ({ comics }) =>
+  comics.map(comic => (
+    <Comic key={comic.id}>
+      <Text as="p" weight="bold">
+        {comic.title}
+      </Text>
+      <Text as="p">{comic.characters.join(', ')}</Text>
+    </Comic>
+  ))
+
+const Footer = ({ comicCount }) => (
+  <div>
+    <Text>Elementos en la lista: {comicCount}</Text>
+  </div>
+)
 
 const Layout = styled.div`
   max-width: 1140px;

@@ -1,36 +1,45 @@
 import React from 'react'
 import { Text } from 'ui/components/Text'
-import { Input } from 'ui/components/Input'
 import styled from 'styled-components'
 import { sizes } from 'ui/theme'
 import { Button } from 'ui/components/Button'
-
-const comics = [
-  {
-    id: 45977,
-    title: 'Captain America (2012) #11',
-    characters: ['Captain America']
-  },
-  {
-    id: 43722,
-    title: 'Captain America (2012) #1',
-    characters: ['Captain America']
-  },
-  {
-    id: 40391,
-    title: 'Captain America (2011) #18',
-    characters: ['Captain America']
-  },
-  {
-    id: 43339,
-    title: 'Uncanny Avengers (2012) #1',
-    characters: ['Captain America', 'Havok', 'Rogue', 'Scarlet Witch', 'Thor', 'Wolverine']
-  }
-]
+import { api } from 'api'
+import { Select } from 'ui/components/Select'
+import isUndefined from 'lodash/isUndefined'
 
 export const ComicsList = () => {
-  const [filter, setFilter] = React.useState('')
-  const filteredComics = comics.filter(comic => comic.title.toLowerCase().includes(filter.toLowerCase()))
+  const [comics, setComics] = React.useState([])
+  const [characters, setCharacters] = React.useState([])
+  const [firstCharacterFilter, setFirstCharacterFilter] = React.useState(undefined)
+  const [secondCharacterFilter, setSecondCharacterFilter] = React.useState(undefined)
+
+  React.useEffect(() => {
+    async function fetchCharacters() {
+      setCharacters(await api.characters())
+    }
+
+    fetchCharacters()
+  }, [])
+
+  React.useEffect(() => {
+    async function fetchComics() {
+      if (isUndefined(firstCharacterFilter) || isUndefined(secondCharacterFilter)) {
+        return
+      }
+
+      const [firstCharacterComics, secondCharacterComics] = await Promise.all([
+        api.comics(firstCharacterFilter),
+        api.comics(secondCharacterFilter)
+      ])
+      const commonComics = firstCharacterComics.filter(comic1 =>
+        secondCharacterComics.some(comic2 => comic1.id === comic2.id)
+      )
+
+      setComics(commonComics)
+    }
+
+    fetchComics()
+  }, [firstCharacterFilter, secondCharacterFilter])
 
   return (
     <Layout>
@@ -43,21 +52,50 @@ export const ComicsList = () => {
       <Text as="p" size="medium" marginBottom="base">
         Selecciona una pareja de personajes
       </Text>
-      <Header onFilter={setFilter} onClear={() => setFilter('')} filter={filter} />
-      <List comics={filteredComics} />
-      <Footer comicCount={filteredComics.length} />
+      <Header
+        characters={characters}
+        firstCharacterFilter={firstCharacterFilter}
+        secondCharacterFilter={secondCharacterFilter}
+        onChangeFirstCharacter={setFirstCharacterFilter}
+        onChangeSecondCharacter={setSecondCharacterFilter}
+        onClear={() => {
+          setComics([])
+          setFirstCharacterFilter(undefined)
+          setSecondCharacterFilter(undefined)
+        }}
+      />
+      <List comics={comics} />
+      <Footer comicCount={comics.length} />
     </Layout>
   )
 }
 
-const Header = ({ onFilter, onClear, filter }) => (
-  <>
-    <ComicInput onChange={event => onFilter(event.target.value)} value={filter} />
-    <Button marginLeft="base" onClick={onClear}>
-      Limpiar búsqueda
-    </Button>
-  </>
-)
+const Header = ({
+  characters,
+  firstCharacterFilter,
+  secondCharacterFilter,
+  onClear,
+  onChangeFirstCharacter,
+  onChangeSecondCharacter
+}) => {
+  const options = characters.map(character => ({ value: character.id, label: character.name }))
+
+  return (
+    <>
+      <CharacterSelect
+        options={options}
+        value={firstCharacterFilter}
+        onSelect={event => onChangeFirstCharacter(event.target.value)}
+      />
+      <CharacterSelect
+        options={options}
+        value={secondCharacterFilter}
+        onSelect={event => onChangeSecondCharacter(event.target.value)}
+      />
+      <Button onClick={onClear}>Limpiar búsqueda</Button>
+    </>
+  )
+}
 
 const List = ({ comics }) =>
   comics.map(comic => (
@@ -84,8 +122,9 @@ const Layout = styled.div`
   width: 100%;
 `
 
-const ComicInput = styled(Input)`
+const CharacterSelect = styled(Select)`
   margin-bottom: ${sizes.base};
+  margin-right: ${sizes.large};
 `
 
 const Comic = styled.div`

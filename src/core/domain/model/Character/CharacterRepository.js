@@ -1,12 +1,7 @@
-import { api } from 'core/infrastructure/api'
-import { Character } from './Character'
-
-const all = async () => {
-  const charactersDTO = await api.characters()
-
-  return charactersDTO.map(characterDTO => new Character(characterDTO.id, characterDTO.name))
-}
+import { ApiCharacterRepository } from 'core/infrastructure/domain/model/Character/ApiCharacterRepository'
 
 export const CharacterRepository = {
-  all
+  all: () => Promise.reject('[CharacterRepository#all] must be implemented')
 }
+
+export const characterRepository = Object.assign({}, CharacterRepository, ApiCharacterRepository)

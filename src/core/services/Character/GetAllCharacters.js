@@ -1,3 +1,1 @@
-import { CharacterRepository } from '../../domain/model/Character/CharacterRepository'
-
-export const GetAllCharacters = async () => CharacterRepository.all()
+export const GetAllCharacters = ({ characterRepository }) => async () => characterRepository.all()

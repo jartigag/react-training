@@ -4,11 +4,11 @@ export class Character {
     this.name = name
   }
 
-  id() {
+  getId() {
     return this.id
   }
 
-  name() {
+  getName() {
     return this.name
   }
 }

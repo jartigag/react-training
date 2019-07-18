@@ -1,12 +1,7 @@
-import { api } from 'core/infrastructure/api'
-import { Comic } from './Comic'
-
-const findBy = async characterId => {
-  const comicsDTO = await api.comics(characterId)
-
-  return comicsDTO.map(comicDTO => new Comic(comicDTO.id, comicDTO.title, comicDTO.characters))
-}
+import { ApiComicRepository } from 'core/infrastructure/domain/model/Comic/ApiComicRepository'
 
 export const ComicRepository = {
-  findBy
+  findBy: () => Promise.reject('[ComicRepository#findBy] must be implemented')
 }
+
+export const comicRepository = Object.assign({}, ComicRepository, ApiComicRepository)

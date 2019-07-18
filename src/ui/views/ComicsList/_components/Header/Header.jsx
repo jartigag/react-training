@@ -12,7 +12,7 @@ export const Header = ({
   onChangeFirstCharacter,
   onChangeSecondCharacter
 }) => {
-  const options = characters.map(character => ({ value: character.id, label: character.name }))
+  const options = characters.map(character => ({ value: character.getId(), label: character.getName() }))
 
   return (
     <>

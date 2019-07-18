@@ -5,15 +5,15 @@ export class Comic {
     this.characters = characters
   }
 
-  id() {
+  getId() {
     return this.id
   }
 
-  title() {
+  getTitle() {
     return this.title
   }
 
-  characters() {
+  getCharacters() {
     return this.characters
   }
 

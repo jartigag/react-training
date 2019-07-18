@@ -5,11 +5,11 @@ import { sizes } from 'ui/theme'
 
 export const List = ({ comics }) =>
   comics.map(comic => (
-    <Comic key={comic.id}>
+    <Comic key={comic.getId()}>
       <Text as="p" weight="bold">
-        {comic.title}
+        {comic.getTitle()}
       </Text>
-      <Text as="p">{comic.characters.join(', ')}</Text>
+      <Text as="p">{comic.getCharacters().join(', ')}</Text>
     </Comic>
   ))
 

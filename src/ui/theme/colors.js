@@ -15,5 +15,6 @@ export const color = {
   yellow: '#FFFBEA',
   white: '#FFFFFF',
   black: '#000000',
+  dark: '#121212',
   shadow1: 'rgba(190,200,210,0.2)'
 }

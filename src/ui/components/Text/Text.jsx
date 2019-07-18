@@ -1,7 +1,8 @@
 import React from 'react'
-import { alignmentCss, color, font, marginsCss } from 'ui/theme'
+import { alignmentCss, color as colorList, font, marginsCss } from 'ui/theme'
 import styled, { css } from 'styled-components'
 import isUndefined from 'lodash/isUndefined'
+import { ThemeContext } from 'ui/views/_components/_context/ThemeContext'
 
 const TextRaw = ({ as: As = 'span', children, className, title }) => (
   <As className={className} title={title}>
@@ -9,14 +10,14 @@ const TextRaw = ({ as: As = 'span', children, className, title }) => (
   </As>
 )
 
-export const Text = styled(TextRaw)`
+const StyledText = styled(TextRaw)`
   ${marginsCss}
   ${alignmentCss}
 
   ${p =>
     p.color &&
     css`
-      color: ${color[p.color]};
+      color: ${colorList[p.color]};
     `}
 
   ${p =>
@@ -57,3 +58,8 @@ export const Text = styled(TextRaw)`
       font-weight: ${font.weight.regular};
     `}
 `
+
+export const Text = ({ color, ...rest }) => {
+  const theme = React.useContext(ThemeContext)
+  return <StyledText {...rest} color={theme.getMode() === 'DAY' ? 'black1' : 'white'} />
+}

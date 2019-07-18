@@ -7,3 +7,7 @@ export class Theme {
     return this.mode
   }
 }
+
+export const ThemeEvent = {
+  updated: 'theme_updated'
+}

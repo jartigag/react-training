@@ -4,10 +4,13 @@ import * as serviceWorker from './serviceWorker'
 import { Root } from 'ui/views'
 import { Router } from 'react-router-dom'
 import { history } from 'core/infrastructure/navigation/history'
+import { ThemeProvider } from 'ui/views/_components/_context/ThemeContext'
 
 ReactDOM.render(
   <Router history={history}>
-    <Root />
+    <ThemeProvider>
+      <Root />
+    </ThemeProvider>
   </Router>,
   document.getElementById('root')
 )

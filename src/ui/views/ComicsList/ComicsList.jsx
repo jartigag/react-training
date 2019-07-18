@@ -13,8 +13,8 @@ import { Loading } from 'ui/components/Loading'
 import { Button } from 'ui/components/Button'
 import { UserService } from 'core/services/User'
 import { navigator } from 'core/infrastructure/navigation/navigator'
-import { ThemeService } from '../../../core/services/Theme'
-import { Theme } from '../../../core/domain/model/Theme/Theme'
+import { ThemeService } from 'core/services/Theme'
+import { ThemeContext } from 'ui/views/_components/_context/ThemeContext'
 
 export const ComicsList = () => {
   const [state, dispatch] = React.useReducer(reducer, initialState)
@@ -24,8 +24,8 @@ export const ComicsList = () => {
     await UserService.logout()
     navigator.goToLogin()
   }
-  const theme = new Theme('DAY')
-  const onThemeModeToggle = async () => ThemeService.toggleMode(theme.getMode())
+  const theme = React.useContext(ThemeContext)
+  const onThemeModeToggle = async () => ThemeService.toggleMode(theme.getMode() === 'DAY' ? 'NIGHT' : 'DAY')
 
   React.useEffect(() => {
     async function fetchCharacters() {
@@ -70,11 +70,13 @@ export const ComicsList = () => {
 
   return (
     <Layout>
-      <Button onClick={onLogout}>Cerrar Sesión</Button>
-      <Text as="span" marginBottom="small" marginLeft="base" marginRight="small">
-        El tema actual es: {theme.getMode()}
-      </Text>
+      <Button onClick={onLogout} marginRight="medium">
+        Cerrar Sesión
+      </Button>
       <input type="checkbox" onClick={onThemeModeToggle} />
+      <Text as="span" marginBottom="small" marginRight="small">
+        El tema actual es: {theme.getMode() === 'DAY' ? 'modo día' : 'modo noche'}
+      </Text>
       <Text as="h1" weight="black" size="h1" marginBottom="small">
         Buscador de cómics de Marvel
       </Text>

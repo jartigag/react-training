@@ -10,11 +10,18 @@ import isUndefined from 'lodash/isUndefined'
 import { Error } from 'ui/components/Error/Error'
 import { color } from 'ui/theme'
 import { Loading } from 'ui/components/Loading'
+import { Button } from 'ui/components/Button'
+import { UserService } from 'core/services/User'
+import { navigator } from 'core/infrastructure/navigation/navigator'
 
 export const ComicsList = () => {
   const [state, dispatch] = React.useReducer(reducer, initialState)
   const { firstCharacterFilter, secondCharacterFilter, error, loading, comics } = state
   const [characters, setCharacters] = React.useState([])
+  const onLogout = async () => {
+    await UserService.logout()
+    navigator.goToLogin()
+  }
 
   React.useEffect(() => {
     async function fetchCharacters() {
@@ -59,6 +66,7 @@ export const ComicsList = () => {
 
   return (
     <Layout>
+      <Button onClick={onLogout}>Cerrar Sesión</Button>
       <Text as="h1" weight="black" size="h1" marginBottom="small">
         Buscador de cómics de Marvel
       </Text>

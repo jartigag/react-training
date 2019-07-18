@@ -3,13 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "formik": "2.1.5",
     "lodash": "4.17.20",
     "polished": "3.6.7",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-router-dom": "5.2.0",
     "react-scripts": "3.4.3",
-    "styled-components": "5.2.0"
+    "styled-components": "5.2.0",
+    "yup": "0.29.3"
   },
   "scripts": {
     "start": "react-scripts start",

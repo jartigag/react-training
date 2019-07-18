@@ -1,15 +1,16 @@
 import React from 'react'
-import { BoxColumn, ButtonRow, Container, Form, Input, LoginBox, Logo } from './Login.style'
+import { BoxColumn, ButtonRow, Container, Input, LoginBox, Logo } from './Login.style'
 import { Button } from 'ui/components/Button/Button'
 import { Text } from 'ui/components/Text'
 import { Redirect } from 'react-router-dom'
 import { routes } from 'ui/routes'
 import reactLogo from './react-logo.png'
 import { UserService } from 'core/services/User'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import * as Yup from 'yup'
+import styled from 'styled-components'
 
 export const Login = ({ location }) => {
-  const [user, setUser] = React.useState('')
-  const [password, setPassword] = React.useState('')
   const [redirectToReferrer, setRedirectToReferrer] = React.useState(false)
   const { from } = location.state || { from: { pathname: routes.COMICS } }
   const onLogin = async (user, password) => {
@@ -29,26 +30,54 @@ export const Login = ({ location }) => {
           <Text marginTop="extrasmall" marginBottom="extrasmall" as="span" textAlign="center" size="base">
             Iniciar sesión
           </Text>
-          <Form
-            onSubmit={event => {
-              event.preventDefault()
-              onLogin(user, password)
+          <Formik
+            initialValues={{ user: '', password: '' }}
+            validationSchema={validationSchema}
+            onSubmit={(values, { setSubmitting }) => {
+              onLogin(values.user, values.password)
+              setSubmitting(false)
             }}>
-            <Input value={user} onChange={e => setUser(e.target.value)} placeholder="Usuario" />
-            <Input
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              type="password"
-              placeholder="Contraseña"
-            />
-            <ButtonRow>
-              <Button type="submit" size="small">
-                Acceder
-              </Button>
-            </ButtonRow>
-          </Form>
+            {({ isSubmitting }) => (
+              <LoginForm>
+                <Field name="user" type="text">
+                  {({ field }) => <LoginInput type="text" {...field} placeholder="Usuario" />}
+                </Field>
+                <ErrorMessage name="user" component="div" />
+                <Field type="password" name="password">
+                  {({ field }) => <LoginInput type="password" {...field} placeholder="Contraseña" />}
+                </Field>
+                <ErrorMessage name="password" component="div" />
+                <ButtonRow>
+                  <Button type="submit" size="small" disabled={isSubmitting}>
+                    Acceder
+                  </Button>
+                </ButtonRow>
+              </LoginForm>
+            )}
+          </Formik>
         </LoginBox>
       </BoxColumn>
     </Container>
   )
 }
+
+const LoginForm = styled(Form)`
+  width: 100%;
+`
+
+const LoginInput = styled(Input)`
+  display: block;
+  width: 100%;
+`
+
+const oneNumberAndOneLetterAtLeast = /^(?=.*[0-9])(?=.*[a-zA-Z]).*$/
+const validationSchema = Yup.object().shape({
+  user: Yup.string().required('Debes introducir un usuario'),
+  password: Yup.string()
+    .min(6, 'La contraseña debe tener al menos 6 caracteres.')
+    .matches(oneNumberAndOneLetterAtLeast, {
+      message: 'La contraseña debe tener al menos un número y una letra.',
+      excludeEmptyString: true
+    })
+    .required('Debes introducir una contraseña')
+})

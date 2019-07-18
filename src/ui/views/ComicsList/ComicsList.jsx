@@ -41,7 +41,7 @@ export const ComicsList = () => {
         Este buscador encontrará los cómics en los que aparezcan los dos personajes que selecciones en el formulario
       </Text>
       <Text as="p" size="medium" marginBottom="base">
-        Escribe un personaje en la lista
+        Selecciona una pareja de personajes
       </Text>
       <Header onFilter={setFilter} onClear={() => setFilter('')} filter={filter} />
       <List comics={filteredComics} />

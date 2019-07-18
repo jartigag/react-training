@@ -13,6 +13,8 @@ import { Loading } from 'ui/components/Loading'
 import { Button } from 'ui/components/Button'
 import { UserService } from 'core/services/User'
 import { navigator } from 'core/infrastructure/navigation/navigator'
+import { ThemeService } from '../../../core/services/Theme'
+import { Theme } from '../../../core/domain/model/Theme/Theme'
 
 export const ComicsList = () => {
   const [state, dispatch] = React.useReducer(reducer, initialState)
@@ -22,6 +24,8 @@ export const ComicsList = () => {
     await UserService.logout()
     navigator.goToLogin()
   }
+  const theme = new Theme('DAY')
+  const onThemeModeToggle = async () => ThemeService.toggleMode(theme.getMode())
 
   React.useEffect(() => {
     async function fetchCharacters() {
@@ -67,6 +71,10 @@ export const ComicsList = () => {
   return (
     <Layout>
       <Button onClick={onLogout}>Cerrar Sesión</Button>
+      <Text as="span" marginBottom="small" marginLeft="base" marginRight="small">
+        El tema actual es: {theme.getMode()}
+      </Text>
+      <input type="checkbox" onClick={onThemeModeToggle} />
       <Text as="h1" weight="black" size="h1" marginBottom="small">
         Buscador de cómics de Marvel
       </Text>

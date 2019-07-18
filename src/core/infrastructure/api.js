@@ -25,5 +25,13 @@ export const api = {
   allComics: async () => {
     const response = await fetch('/comics.json')
     return response.json()
+  },
+
+  postThemeMode: async themeMode => {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(undefined)
+      }, 500)
+    })
   }
 }

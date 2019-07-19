@@ -20,11 +20,13 @@ export const Header = ({
         options={options}
         value={firstCharacterFilter}
         onSelect={event => onChangeFirstCharacter(event.target.value)}
+        data-testid="select-first-character"
       />
       <CharacterSelect
         options={options}
         value={secondCharacterFilter}
         onSelect={event => onChangeSecondCharacter(event.target.value)}
+        data-testid="select-second-character"
       />
       <Button onClick={onClear}>Limpiar búsqueda</Button>
     </>

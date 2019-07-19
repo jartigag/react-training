@@ -66,7 +66,7 @@ export const ComicsList = () => {
     }
 
     if (loading) {
-      return <Loading color={color.blue1} />
+      return <Loading data-testid="comic-list-loading" color={color.blue1} />
     }
 
     return <List comics={comics} />
@@ -77,7 +77,7 @@ export const ComicsList = () => {
       <Button onClick={onLogout} marginRight="medium">
         Cerrar Sesión
       </Button>
-      <input type="checkbox" onClick={onThemeModeToggle} />
+      <input type="checkbox" onClick={onThemeModeToggle} data-testid="theme-mode-toggle" />
       <Text as="span" marginBottom="small" marginRight="small">
         El tema actual es: {theme.getMode() === 'DAY' ? 'modo día' : 'modo noche'}
       </Text>

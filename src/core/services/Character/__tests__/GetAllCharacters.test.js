@@ -1,12 +1,12 @@
 import { GetAllCharacters } from '../GetAllCharacters'
-import { Character } from 'core/domain/model/Character/Character'
+import { aCharacterCollection } from 'core/domain/model/__builders__/CharacterBuilder'
 
 describe('Get all characters', () => {
   it('gets all characters from a character repository', async () => {
     const characterRepository = {
       all: jest.fn()
     }
-    const expectedCharacters = [new Character(1, 'test')]
+    const expectedCharacters = aCharacterCollection()
     characterRepository.all.mockResolvedValue(expectedCharacters)
     const GetAllCharactersService = GetAllCharacters({ characterRepository })
 

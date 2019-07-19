@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import { sizes } from 'ui/theme/size'
 import { color } from 'ui/theme/colors'
 
-export const Select = ({ options, value = '', onSelect, className }) => (
-  <StyledSelect onChange={onSelect} value={value} className={className}>
+export const Select = ({ options, value = '', onSelect, className, ...rest }) => (
+  <StyledSelect onChange={onSelect} value={value} className={className} {...rest}>
     <option value="" />
     {options.map(option => (
       <option key={option.value} value={option.value}>

@@ -22,4 +22,16 @@ export class ComicsListPage {
 
     return true
   }
+
+  toggleThemeMode = () => {
+    cy.get('input[data-testid~="theme-mode-toggle"]').click()
+
+    return true
+  }
+
+  isThemeModeDark = () => {
+    cy.contains('El tema actual es: modo noche')
+
+    return true
+  }
 }

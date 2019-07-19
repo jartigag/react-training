@@ -4,9 +4,10 @@ describe('Login', () => {
   const loginPage = new LoginPage()
 
   it('logs in and goes to comic list', () => {
-    loginPage
-      .visit()
-      .fillUser('test')
+    loginPage.visit()
+    cy.document().toMatchImageSnapshot()
+
+    loginPage.fillUser('test')
       .fillPassword('password123')
       .submit()
 
@@ -21,5 +22,6 @@ describe('Login', () => {
       .submit()
 
     expect(loginPage.containsPasswordErrorText()).to.be.true
+    cy.document().toMatchImageSnapshot()
   })
 })

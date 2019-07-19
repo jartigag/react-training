@@ -3,7 +3,6 @@ import { alignmentCss, color as colorList, font, marginsCss } from 'ui/theme'
 import styled, { css } from 'styled-components'
 import isUndefined from 'lodash/isUndefined'
 import { ThemeContext } from 'ui/views/_components/_context/ThemeContext'
-import { Theme } from '../../../core/domain/model/Theme/Theme'
 
 const TextRaw = ({ as: As = 'span', children, className, title }) => (
   <As className={className} title={title}>
@@ -61,6 +60,6 @@ const StyledText = styled(TextRaw)`
 `
 
 export const Text = ({ color, ...rest }) => {
-  const theme = new Theme('DAY')
+  const theme = React.useContext(ThemeContext)
   return <StyledText {...rest} color={theme.getMode() === 'DAY' ? 'black1' : 'white'} />
 }

@@ -13,5 +13,17 @@ describe('ComicsList', () => {
       .selectSecondCharacter('Hulk')
 
     expect(comicsListPage.isShowingComicList()).to.be.true
+    cy.document().toMatchImageSnapshot()
+  })
+
+  it('toggles theme mode', () => {
+    context.loginUser()
+
+    comicsListPage
+      .visit()
+      .toggleThemeMode()
+
+    expect(comicsListPage.isThemeModeDark()).to.be.true
+    cy.document().toMatchImageSnapshot()
   })
 })

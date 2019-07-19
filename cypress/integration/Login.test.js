@@ -1,11 +1,25 @@
+import { LoginPage } from './pages/Login'
+
 describe('Login', () => {
+  const loginPage = new LoginPage()
+
   it('logs in and goes to comic list', () => {
-    cy.visit('/login')
+    loginPage
+      .visit()
+      .fillUser('test')
+      .fillPassword('password123')
+      .submit()
 
-    cy.get('input[placeholder="Usuario"]').type('test')
-    cy.get('input[placeholder="Contraseña"]').type('password123')
-    cy.get('form').submit()
+    expect(loginPage.isInComicList()).to.be.true
+  })
 
-    cy.contains('Buscador de cómics de Marvel')
+  it('shows an error if password has invalid format', () => {
+    loginPage
+      .visit()
+      .fillUser('test')
+      .fillPassword('passwordWithoutNumbers')
+      .submit()
+
+    expect(loginPage.containsPasswordErrorText()).to.be.true
   })
 })

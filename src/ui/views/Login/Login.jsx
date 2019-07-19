@@ -38,7 +38,7 @@ export const Login = ({ location }) => {
               setSubmitting(false)
             }}>
             {({ isSubmitting }) => (
-              <LoginForm>
+              <LoginForm data-testid="login-form">
                 <Field name="user" type="text">
                   {({ field }) => <LoginInput type="text" {...field} placeholder="Usuario" />}
                 </Field>

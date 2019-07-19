@@ -37,6 +37,10 @@ export const ComicsList = () => {
 
   React.useEffect(() => {
     async function fetchComics() {
+      if (isUndefined(firstCharacterFilter) || isUndefined(secondCharacterFilter)) {
+        return
+      }
+
       try {
         dispatch({ type: 'FETCH_COMICS' })
         dispatch({
@@ -104,7 +108,7 @@ const initialState = {
   comics: [],
   firstCharacterFilter: undefined,
   secondCharacterFilter: undefined,
-  loading: true,
+  loading: false,
   error: undefined
 }
 

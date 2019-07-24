@@ -6,7 +6,7 @@ import { Root } from 'ui/views/Root'
 import { ThemeProvider } from 'ui/views/_components/_context/ThemeContext'
 import { userStorage } from 'core/domain/model/User/UserStorage'
 
-xdescribe('Login', () => {
+describe('Login', () => {
   afterEach(() => {
     cleanup()
     jest.resetAllMocks()

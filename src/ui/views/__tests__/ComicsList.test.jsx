@@ -25,7 +25,8 @@ describe('ComicsList', () => {
   })
 
   it('shows loading', async () => {
-    jest.spyOn(CharacterService, 'all').mockResolvedValue(aCharacterCollection())
+    const characters = aCharacterCollection()
+    jest.spyOn(CharacterService, 'all').mockResolvedValue(characters)
     jest.spyOn(ThemeService, 'toggleMode').mockResolvedValue(undefined)
     const { findByTestId } = renderWithRouter(
       <ThemeProvider>
@@ -34,12 +35,19 @@ describe('ComicsList', () => {
       { route: routes.COMICS }
     )
 
+    const selectFirstCharacter = await findByTestId('select-first-character')
+    fireEvent.change(selectFirstCharacter, { target: { value: characters[0].getId() } })
+
+    const selectSecondCharacter = await findByTestId('select-second-character')
+    fireEvent.change(selectSecondCharacter, { target: { value: characters[1].getId() } })
+
     const loading = await findByTestId('comic-list-loading')
     expect(loading).toBeDefined()
   })
 
   it('shows error for a character without comic', async () => {
-    jest.spyOn(CharacterService, 'all').mockResolvedValue(aCharacterCollection())
+    const characters = aCharacterCollection()
+    jest.spyOn(CharacterService, 'all').mockResolvedValue(characters)
     jest.spyOn(ThemeService, 'toggleMode').mockResolvedValue(undefined)
     const error = {
       ...new Error('error'),
@@ -47,19 +55,26 @@ describe('ComicsList', () => {
       response: new Response()
     }
     jest.spyOn(ComicService, 'common').mockRejectedValue(error)
-    const { findByText } = renderWithRouter(
+    const { findByText, findByTestId } = renderWithRouter(
       <ThemeProvider>
         <Root />
       </ThemeProvider>,
       { route: routes.COMICS }
     )
 
+    const selectFirstCharacter = await findByTestId('select-first-character')
+    fireEvent.change(selectFirstCharacter, { target: { value: characters[0].getId() } })
+
+    const selectSecondCharacter = await findByTestId('select-second-character')
+    fireEvent.change(selectSecondCharacter, { target: { value: characters[1].getId() } })
+
     const noComicForCharacterError = await findByText('No existe ningún comic para este personaje 😱')
     expect(noComicForCharacterError).toBeDefined()
   })
 
   it('shows generic api error', async () => {
-    jest.spyOn(CharacterService, 'all').mockResolvedValue(aCharacterCollection())
+    const characters = aCharacterCollection()
+    jest.spyOn(CharacterService, 'all').mockResolvedValue(characters)
     jest.spyOn(ThemeService, 'toggleMode').mockResolvedValue(undefined)
     const error = {
       ...new Error('error'),
@@ -67,12 +82,18 @@ describe('ComicsList', () => {
       response: new Response()
     }
     jest.spyOn(ComicService, 'common').mockRejectedValue(error)
-    const { findByText } = renderWithRouter(
+    const { findByText, findByTestId } = renderWithRouter(
       <ThemeProvider>
         <Root />
       </ThemeProvider>,
       { route: routes.COMICS }
     )
+
+    const selectFirstCharacter = await findByTestId('select-first-character')
+    fireEvent.change(selectFirstCharacter, { target: { value: characters[0].getId() } })
+
+    const selectSecondCharacter = await findByTestId('select-second-character')
+    fireEvent.change(selectSecondCharacter, { target: { value: characters[1].getId() } })
 
     const noComicForCharacterError = await findByText('Vuelve a intentarlo más tarde... 🤕')
     expect(noComicForCharacterError).toBeDefined()

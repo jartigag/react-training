@@ -1,1 +1,1 @@
-export { Error } from './Loading'
+export { Error } from './Error'

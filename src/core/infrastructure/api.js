@@ -30,7 +30,7 @@ export const api = {
   postThemeMode: async themeMode => {
     return new Promise(resolve => {
       setTimeout(() => {
-        resolve(undefined)
+        resolve(themeMode)
       }, 500)
     })
   }

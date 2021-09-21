@@ -52,6 +52,9 @@ export const ComicsList = () => {
           <Text as="p">{comic.characters.join(', ')}</Text>
         </Comic>
       ))}
+      <Text as="p">
+        Elementos en la lista: {comics.filter(comic => inputText ? comic.characters.includes(inputText) : comic).length}
+      </Text>
     </Layout>
   )
 }

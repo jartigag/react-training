@@ -43,7 +43,12 @@ export const ComicsList = () => {
       <Text as="p" size="medium" marginBottom="base">
         Escribe un personaje en la lista
       </Text>
-      <ComicInput onChange={(event) => setInputText(event.target.value) } />
+      <ComicInput onChange={(event) => setInputText(event.target.value) } value={inputText} />
+      <button
+        style={{backgroundColor: "darkblue", color: "white"}}
+        onClick={() => setInputText('')}>
+      Limpiar búsqueda
+      </button>
       {comics.filter(comic => inputText ? comic.characters.includes(inputText) : comic).map(comic => (
         <Comic key={comic.id}>
           <Text as="p" weight="bold">

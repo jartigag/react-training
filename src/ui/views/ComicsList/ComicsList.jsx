@@ -30,7 +30,8 @@ const comics = [
 
 export const ComicsList = () => {
 
-  const [inputText, setInputText] = useState('Captain America');
+  const [inputText, setInputText] = useState('')
+  const filteredComics = comics.filter(comic => comic.title.toLowerCase().includes(inputText.toLowerCase()))
 
   return (
     <Layout>
@@ -49,7 +50,7 @@ export const ComicsList = () => {
         onClick={() => setInputText('')}>
       Limpiar búsqueda
       </button>
-      {comics.filter(comic => inputText ? comic.characters.includes(inputText) : comic).map(comic => (
+      {filteredComics.map(comic => (
         <Comic key={comic.id}>
           <Text as="p" weight="bold">
             {comic.title}
@@ -58,7 +59,7 @@ export const ComicsList = () => {
         </Comic>
       ))}
       <Text as="p">
-        Elementos en la lista: {comics.filter(comic => inputText ? comic.characters.includes(inputText) : comic).length}
+        Elementos en la lista: {filteredComics.length}
       </Text>
     </Layout>
   )

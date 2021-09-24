@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Text } from 'ui/components/Text'
 import { Input } from 'ui/components/Input'
 import { Button } from 'ui/components/Button'
+import { Select } from 'ui/components/Select'
 import styled from 'styled-components'
 import { sizes } from '../../theme'
+import { api } from 'api'
 
-const comics = [
+/*const comics = [
   {
     id: 45977,
     title: 'Captain America (2012) #11',
@@ -26,13 +28,35 @@ const comics = [
     title: 'Uncanny Avengers (2012) #1',
     characters: ['Captain America', 'Havok', 'Rogue', 'Scarlet Witch', 'Thor', 'Wolverine']
   }
-]
+]*/
 
 
 export const ComicsList = () => {
 
-  const [inputText, setInputText] = useState('')
-  const filteredComics = comics.filter(comic => comic.title.toLowerCase().includes(inputText.toLowerCase()))
+  const [firstSelectedChar, setFirstSelectedChar] = useState('')
+  const [secondSelectedChar, setSecondSelectedChar] = useState('')
+
+  const [comics, setComics] = useState([]);
+  //const filteredComics = comics.filter(comic => comic.title.toLowerCase().includes(inputText.toLowerCase()))
+
+  useEffect(() => {
+    //fetch(api.allComics)
+    api.allComics()
+      .then(data => {
+        setComics(data); // set comics in state
+      });
+  }, [firstSelectedChar, secondSelectedChar]);
+
+  const [characters, setCharacters] = useState([]);
+  const mappedCharacters = characters.map(character => ({ value: character.id, label: character.name }))
+
+  useEffect(() => {
+    api.characters()
+      .then(data => {
+        setCharacters(data); // set characters in state
+      });
+  }, []);
+
 
   return (
     <Layout>
@@ -43,18 +67,19 @@ export const ComicsList = () => {
         Este buscador encontrará los cómics en los que aparezcan los dos personajes que selecciones en el formulario
       </Text>
       <Text as="p" size="medium" marginBottom="base">
-        Escribe un personaje en la lista
+        Selecciona una pareja de personajes
       </Text>
-      <Header onFilter={() => setInputText('')} onClear={() => setInputText('')} filter={inputText} />
-      <List comics={filteredComics} />
-      <Footer comicCount={filteredComics.length} />
+      <Header characters={mappedCharacters} onFilter={() => ('')} onClear={() => ('')} />
+      <List comics={comics} /> {/* TODO: filteredComics */}
+      <Footer comicCount={comics.length} />
     </Layout>
   )
 }
 
-const Header = ({ onFilter, onClear, filter }) => (
+const Header = ({ characters, onFilter, onClear }) => (
   <>
-    <ComicInput onChange={event => onFilter(event.target.value)} value={filter} />
+  <Select options={characters} onSelect={event => onFilter(event.target.value)}></Select> {/* TODO: value= */}
+  <Select options={characters} onSelect={event => onFilter(event.target.value)}></Select>
     <Button marginLeft="base" onClick={onClear}>
       Limpiar búsqueda
     </Button>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Text } from 'ui/components/Text'
 import { Input } from 'ui/components/Input'
+import { Button } from 'ui/components/Button'
 import styled from 'styled-components'
 import { sizes } from '../../theme'
 
@@ -45,11 +46,9 @@ export const ComicsList = () => {
         Escribe un personaje en la lista
       </Text>
       <ComicInput onChange={(event) => setInputText(event.target.value) } value={inputText} />
-      <button
-        style={{backgroundColor: "darkblue", color: "white"}}
-        onClick={() => setInputText('')}>
-      Limpiar búsqueda
-      </button>
+      <Button marginLeft="base" onClick={() => setInputText('')}>
+        Limpiar búsqueda
+      </Button>
       {filteredComics.map(comic => (
         <Comic key={comic.id}>
           <Text as="p" weight="bold">

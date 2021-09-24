@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Text } from 'ui/components/Text'
 import { Input } from 'ui/components/Input'
-import styled from 'styled-components'
-import { sizes } from 'ui/theme'
 import { Button } from 'ui/components/Button'
+import styled from 'styled-components'
+import { sizes } from '../../theme'
 
 const comics = [
   {
@@ -45,7 +45,7 @@ export const ComicsList = () => {
       <Text as="p" size="medium" marginBottom="base">
         Escribe un personaje en la lista
       </Text>
-      <Header onFilter={setFilter} onClear={() => setFilter('')} filter={filter} />
+      <Header onFilter={() => setInputText('')} onClear={() => setInputText('')} filter={inputText} />
       <List comics={filteredComics} />
       <Footer comicCount={filteredComics.length} />
     </Layout>

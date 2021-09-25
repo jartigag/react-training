@@ -69,17 +69,19 @@ export const ComicsList = () => {
       <Text as="p" size="medium" marginBottom="base">
         Selecciona una pareja de personajes
       </Text>
-      <Header characters={mappedCharacters} onFilter={() => ('')} onClear={() => ('')} />
+      <Header characters={mappedCharacters} onFilter={() => ('')} onClear={() => ('')}
+        firstSelectedChar={firstSelectedChar} setFirstSelectedChar={setFirstSelectedChar}
+        secondSelectedChar={secondSelectedChar} setSecondSelectedChar={setSecondSelectedChar} />
       <List comics={comics} /> {/* TODO: filteredComics */}
       <Footer comicCount={comics.length} />
     </Layout>
   )
 }
 
-const Header = ({ characters, onFilter, onClear }) => (
+const Header = ({ characters, onFilter, onClear, firstSelectedChar, setFirstSelectedChar, secondSelectedChar, setSecondSelectedChar }) => (
   <>
-  <Select options={characters} onSelect={event => onFilter(event.target.value)}></Select> {/* TODO: value= */}
-  <Select options={characters} onSelect={event => onFilter(event.target.value)}></Select>
+  <Select options={characters} onSelect={event => setFirstSelectedChar(event.target.value)} value={firstSelectedChar}></Select>
+  <Select options={characters} onSelect={event => setSecondSelectedChar(event.target.value)} value={secondSelectedChar}></Select>
     <Button marginLeft="base" onClick={onClear}>
       Limpiar búsqueda
     </Button>

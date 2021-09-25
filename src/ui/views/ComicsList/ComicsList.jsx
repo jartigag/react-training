@@ -6,33 +6,9 @@ import styled from 'styled-components'
 import { sizes } from '../../theme'
 import { api } from 'api'
 
-/*const comics = [
-  {
-    id: 45977,
-    title: 'Captain America (2012) #11',
-    characters: ['Captain America']
-  },
-  {
-    id: 43722,
-    title: 'Captain America (2012) #1',
-    characters: ['Captain America']
-  },
-  {
-    id: 40391,
-    title: 'Captain America (2011) #18',
-    characters: ['Captain America']
-  },
-  {
-    id: 43339,
-    title: 'Uncanny Avengers (2012) #1',
-    characters: ['Captain America', 'Havok', 'Rogue', 'Scarlet Witch', 'Thor', 'Wolverine']
-  }
-]*/
-
-
 export const ComicsList = () => {
 
-  const [characters, setCharacters] = useState([]);
+  const [characters, setCharacters] = useState([])
   const mappedCharacters = characters.map(character => ({ value: character.id, label: character.name }))
 
   useEffect(() => {
@@ -40,14 +16,12 @@ export const ComicsList = () => {
       .then(data => {
         setCharacters(data); // set characters in state
       });
-  }, []);
+  }, [])
 
   const [firstSelectedChar, setFirstSelectedChar] = useState('')
   const [secondSelectedChar, setSecondSelectedChar] = useState('')
-
   const [comics, setComics] = useState([]);
   const getCommonComics = async(firstSelectedChar, secondSelectedChar) => {
-
     const [firstCharComics, secondCharComics] = await Promise.all([
       api.comics(firstSelectedChar),
       api.comics(secondSelectedChar)
@@ -65,7 +39,13 @@ export const ComicsList = () => {
       .then(data => {
         setComics(data); // set comics in state
       });
-  }, [firstSelectedChar, secondSelectedChar]);
+  }, [firstSelectedChar, secondSelectedChar])
+
+  const clearSelectedChars = () => {
+    setFirstSelectedChar('')
+    setSecondSelectedChar('')
+    setComics([])
+  }
 
   return (
     <Layout>
@@ -78,7 +58,7 @@ export const ComicsList = () => {
       <Text as="p" size="medium" marginBottom="base">
         Selecciona una pareja de personajes
       </Text>
-      <Header characters={mappedCharacters} onFilter={() => ('')} onClear={() => ('')}
+      <Header characters={mappedCharacters} onClear={clearSelectedChars}
         firstSelectedChar={firstSelectedChar} setFirstSelectedChar={setFirstSelectedChar}
         secondSelectedChar={secondSelectedChar} setSecondSelectedChar={setSecondSelectedChar} />
       <List comics={comics} />
@@ -87,7 +67,7 @@ export const ComicsList = () => {
   )
 }
 
-const Header = ({ characters, onFilter, onClear, firstSelectedChar, setFirstSelectedChar, secondSelectedChar, setSecondSelectedChar }) => (
+const Header = ({ characters, onClear, firstSelectedChar, setFirstSelectedChar, secondSelectedChar, setSecondSelectedChar }) => (
   <>
   <Select options={characters} onSelect={event => setFirstSelectedChar(event.target.value)} value={firstSelectedChar}></Select>
   <Select options={characters} onSelect={event => setSecondSelectedChar(event.target.value)} value={secondSelectedChar}></Select>

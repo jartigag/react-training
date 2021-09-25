@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Text } from 'ui/components/Text'
-import { Input } from 'ui/components/Input'
 import { Button } from 'ui/components/Button'
 import { Select } from 'ui/components/Select'
 import styled from 'styled-components'
@@ -47,12 +46,22 @@ export const ComicsList = () => {
   const [secondSelectedChar, setSecondSelectedChar] = useState('')
 
   const [comics, setComics] = useState([]);
-  const commonComics = firstCharacterComics.filter(
-    comic1 => secondCharacterComics.some(comic2 => comic1.id === comic2.id)
-  )
+  const getCommonComics = async(firstSelectedChar, secondSelectedChar) => {
+
+    const [firstCharComics, secondCharComics] = await Promise.all([
+      api.comics(firstSelectedChar),
+      api.comics(secondSelectedChar)
+    ])
+
+    const commonComics = firstCharComics.filter(
+      comic1 => secondCharComics.some(comic2 => comic1.id === comic2.id)
+    )
+
+    return commonComics
+  }
 
   useEffect(() => {
-    api.allComics()
+    getCommonComics(firstSelectedChar, secondSelectedChar)
       .then(data => {
         setComics(data); // set comics in state
       });
@@ -72,8 +81,8 @@ export const ComicsList = () => {
       <Header characters={mappedCharacters} onFilter={() => ('')} onClear={() => ('')}
         firstSelectedChar={firstSelectedChar} setFirstSelectedChar={setFirstSelectedChar}
         secondSelectedChar={secondSelectedChar} setSecondSelectedChar={setSecondSelectedChar} />
-      <List comics={commonComics} /> {/* WIP: commonComics */}
-      <Footer comicCount={commonComics.length} />
+      <List comics={comics} />
+      <Footer comicCount={comics.length} />
     </Layout>
   )
 }
@@ -111,10 +120,6 @@ const Layout = styled.div`
   padding-right: 15px;
   padding-left: 15px;
   width: 100%;
-`
-
-const ComicInput = styled(Input)`
-  margin-bottom: ${sizes.base};
 `
 
 const Comic = styled.div`

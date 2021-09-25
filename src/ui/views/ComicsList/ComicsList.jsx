@@ -33,20 +33,6 @@ import { api } from 'api'
 
 export const ComicsList = () => {
 
-  const [firstSelectedChar, setFirstSelectedChar] = useState('')
-  const [secondSelectedChar, setSecondSelectedChar] = useState('')
-
-  const [comics, setComics] = useState([]);
-  //const filteredComics = comics.filter(comic => comic.title.toLowerCase().includes(inputText.toLowerCase()))
-
-  useEffect(() => {
-    //fetch(api.allComics)
-    api.allComics()
-      .then(data => {
-        setComics(data); // set comics in state
-      });
-  }, [firstSelectedChar, secondSelectedChar]);
-
   const [characters, setCharacters] = useState([]);
   const mappedCharacters = characters.map(character => ({ value: character.id, label: character.name }))
 
@@ -57,6 +43,20 @@ export const ComicsList = () => {
       });
   }, []);
 
+  const [firstSelectedChar, setFirstSelectedChar] = useState('')
+  const [secondSelectedChar, setSecondSelectedChar] = useState('')
+
+  const [comics, setComics] = useState([]);
+  const commonComics = firstCharacterComics.filter(
+    comic1 => secondCharacterComics.some(comic2 => comic1.id === comic2.id)
+  )
+
+  useEffect(() => {
+    api.allComics()
+      .then(data => {
+        setComics(data); // set comics in state
+      });
+  }, [firstSelectedChar, secondSelectedChar]);
 
   return (
     <Layout>
@@ -72,8 +72,8 @@ export const ComicsList = () => {
       <Header characters={mappedCharacters} onFilter={() => ('')} onClear={() => ('')}
         firstSelectedChar={firstSelectedChar} setFirstSelectedChar={setFirstSelectedChar}
         secondSelectedChar={secondSelectedChar} setSecondSelectedChar={setSecondSelectedChar} />
-      <List comics={comics} /> {/* TODO: filteredComics */}
-      <Footer comicCount={comics.length} />
+      <List comics={commonComics} /> {/* WIP: commonComics */}
+      <Footer comicCount={commonComics.length} />
     </Layout>
   )
 }

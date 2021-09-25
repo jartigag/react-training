@@ -20,7 +20,8 @@ export const ComicsList = () => {
 
   const [firstSelectedChar, setFirstSelectedChar] = useState('')
   const [secondSelectedChar, setSecondSelectedChar] = useState('')
-  const [comics, setComics] = useState([]);
+  const [comics, setComics] = useState([])
+
   const getCommonComics = async(firstSelectedChar, secondSelectedChar) => {
     const [firstCharComics, secondCharComics] = await Promise.all([
       api.comics(firstSelectedChar),
@@ -41,12 +42,6 @@ export const ComicsList = () => {
       });
   }, [firstSelectedChar, secondSelectedChar])
 
-  const clearSelectedChars = () => {
-    setFirstSelectedChar('')
-    setSecondSelectedChar('')
-    setComics([])
-  }
-
   return (
     <Layout>
       <Text as="h1" weight="black" size="h1" marginBottom="small">
@@ -58,9 +53,16 @@ export const ComicsList = () => {
       <Text as="p" size="medium" marginBottom="base">
         Selecciona una pareja de personajes
       </Text>
-      <Header characters={mappedCharacters} onClear={clearSelectedChars}
+      <Header
+        characters={mappedCharacters}
         firstSelectedChar={firstSelectedChar} setFirstSelectedChar={setFirstSelectedChar}
-        secondSelectedChar={secondSelectedChar} setSecondSelectedChar={setSecondSelectedChar} />
+        secondSelectedChar={secondSelectedChar} setSecondSelectedChar={setSecondSelectedChar}
+        onClear={() => {
+          setFirstSelectedChar('')
+          setSecondSelectedChar('')
+          setComics([])
+        }}
+      />
       <List comics={comics} />
       <Footer comicCount={comics.length} />
     </Layout>

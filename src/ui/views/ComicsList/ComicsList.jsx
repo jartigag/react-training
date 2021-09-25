@@ -12,10 +12,7 @@ export const ComicsList = () => {
   const mappedCharacters = characters.map(character => ({ value: character.id, label: character.name }))
 
   useEffect(() => {
-    api.characters()
-      .then(data => {
-        setCharacters(data); // set characters in state
-      });
+    (async () => setCharacters(await api.characters()))()
   }, [])
 
   const [firstSelectedChar, setFirstSelectedChar] = useState('')
@@ -36,10 +33,11 @@ export const ComicsList = () => {
   }
 
   useEffect(() => {
-    getCommonComics(firstSelectedChar, secondSelectedChar)
-      .then(data => {
-        setComics(data); // set comics in state
-      });
+    async function fetchComics() {
+      setComics(await getCommonComics(firstSelectedChar, secondSelectedChar))
+    }
+
+    fetchComics()
   }, [firstSelectedChar, secondSelectedChar])
 
   return (

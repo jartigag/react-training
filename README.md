@@ -1,4 +1,8 @@
+forked from [https://github.com/540/react-training](https://github.com/540/react-training)
+
 ![](screenshot.png)
+
+---
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
